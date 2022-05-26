@@ -26,7 +26,7 @@ public final class DeckTransitioningDelegate: NSObject, UIViewControllerTransiti
     
     // MARK: - Private variables
     
-    private let isSwipeToDismissEnabled: Bool
+    private let swipeToDismissAllowed: (() -> (Bool))?
     private let presentDuration: TimeInterval?
     private let presentAnimation: (() -> ())?
     private let presentCompletion: ((Bool) -> ())?
@@ -54,14 +54,14 @@ public final class DeckTransitioningDelegate: NSObject, UIViewControllerTransiti
     ///		alongside the card dismissal animation
     ///   - dismissCompletion: A block that will be run after the card has been
     ///		dismissed
-    @objc public init(isSwipeToDismissEnabled: Bool = true,
+    @objc public init(swipeToDismissAllowed: (() -> (Bool))? = nil,
                       presentDuration: NSNumber? = nil,
                       presentAnimation: (() -> ())? = nil,
                       presentCompletion: ((Bool) -> ())? = nil,
                       dismissDuration: NSNumber? = nil,
                       dismissAnimation: (() -> ())? = nil,
                       dismissCompletion: ((Bool) -> ())? = nil) {
-        self.isSwipeToDismissEnabled = isSwipeToDismissEnabled
+        self.swipeToDismissAllowed = swipeToDismissAllowed
         self.presentDuration = presentDuration?.doubleValue
         self.presentAnimation = presentAnimation
         self.presentCompletion = presentCompletion
@@ -112,7 +112,7 @@ public final class DeckTransitioningDelegate: NSObject, UIViewControllerTransiti
         let presentationController = DeckPresentationController(
             presentedViewController: presented,
             presenting: presenting,
-            isSwipeToDismissGestureEnabled: isSwipeToDismissEnabled,
+            swipeToDismissAllowed: swipeToDismissAllowed,
             presentAnimation: presentAnimation,
             presentCompletion: presentCompletion,
             dismissAnimation: dismissAnimation,
